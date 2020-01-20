@@ -39,9 +39,17 @@ end
 
 # SUBSCRIBE
 
+def receive_subscription_message(service_bus, topic, subscription)
+  service_bus.receive_subscription_message(topic.name, subscription.name)
+rescue Faraday::TimeoutError => error
+  puts 'retry'
+  receive_subscription_message(service_bus, topic, subscription)
+end
+
 while true
   # Receive a subscription message
-  message = service_bus.receive_subscription_message(topic1.name, subscription.name)
+  # TODO This raises a Faraday::TimeoutError
+  message = receive_subscription_message(service_bus, topic1, subscription)
   puts message.body
   # Delete a subscription message
   service_bus.delete_subscription_message(message)
