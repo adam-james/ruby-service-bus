@@ -48,7 +48,6 @@ end
 
 while true
   # Receive a subscription message
-  # TODO This raises a Faraday::TimeoutError
   message = receive_subscription_message(service_bus, topic1, subscription)
   puts message.body
   # Delete a subscription message
